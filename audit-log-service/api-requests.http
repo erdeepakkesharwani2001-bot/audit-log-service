@@ -1,0 +1,139 @@
+@baseUrl = http://localhost:8080
+@token = YOUR_JWT_TOKEN_HERE
+
+### 1) Register a new user
+POST {{baseUrl}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "newadmin",
+  "password": "AdminPassword123!",
+  "role": "ADMIN"
+}
+
+### 2) Login and get JWT token
+POST {{baseUrl}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "newadmin",
+  "password": "AdminPassword123!"
+}
+
+### 3) Create an audit event (AUDIT_WRITER or ADMIN only)
+POST {{baseUrl}}/api/v1/audit/events
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "eventType": "USER_LOGIN",
+  "actorId": "newadmin",
+  "resourceType": "APPLICATION",
+  "resourceId": "APP-001",
+  "payload": {
+    "action": "logged_in",
+    "ipAddress": "10.0.0.12",
+    "status": "success"
+  }
+}
+
+### 4) List audit events with pagination
+GET {{baseUrl}}/api/v1/audit/events?page=0&size=20
+Authorization: Bearer {{token}}
+
+### 5) Get audit event by id
+GET {{baseUrl}}/api/v1/audit/events/1
+Authorization: Bearer {{token}}
+
+### 6) Search events by resource
+GET {{baseUrl}}/api/v1/audit/events/search/by-resource?resourceType=APPLICATION&resourceId=APP-001&page=0&size=20
+Authorization: Bearer {{token}}
+
+### 7) Search events by actor
+GET {{baseUrl}}/api/v1/audit/events/search/by-actor?actorId=newadmin&page=0&size=20
+Authorization: Bearer {{token}}
+
+### 8) Search events by type
+GET {{baseUrl}}/api/v1/audit/events/search/by-type?eventType=USER_LOGIN&page=0&size=20
+Authorization: Bearer {{token}}
+
+### 9) Search events by time range
+GET {{baseUrl}}/api/v1/audit/events/search/by-time-range?startTime=2026-01-01T00:00:00&endTime=2026-12-31T23:59:59&page=0&size=20
+Authorization: Bearer {{token}}
+
+### 10) Verify complete hash chain
+POST {{baseUrl}}/api/v1/audit/events/verify-chain
+Authorization: Bearer {{token}}
+
+### 11) Verify a single event integrity
+POST {{baseUrl}}/api/v1/audit/events/1/verify
+Authorization: Bearer {{token}}
+
+### 12) Archive an audit event (ADMIN only)
+POST {{baseUrl}}/api/v1/audit/events/1/archive
+Authorization: Bearer {{token}}
+
+### 13) Get audit event stats summary
+GET {{baseUrl}}/api/v1/audit/events/stats/summary
+Authorization: Bearer {{token}}
+
+### 14) Generate compliance report
+GET {{baseUrl}}/api/v1/compliance/reports/compliance?startDate=2026-01-01T00:00:00&endDate=2026-12-31T23:59:59
+Authorization: Bearer {{token}}
+
+### 15) Generate user audit trail
+GET {{baseUrl}}/api/v1/compliance/reports/user-audit-trail?actorId=newadmin&days=30
+Authorization: Bearer {{token}}
+
+### 16) Generate resource audit trail
+GET {{baseUrl}}/api/v1/compliance/reports/resource-audit-trail?resourceType=APPLICATION&resourceId=APP-001
+Authorization: Bearer {{token}}
+
+### 17) Perform compliance check
+POST {{baseUrl}}/api/v1/compliance/check
+Authorization: Bearer {{token}}
+
+### 18) Apply retention policy
+POST {{baseUrl}}/api/v1/compliance/retention/apply?retentionDays=365
+Authorization: Bearer {{token}}
+
+### 19) Redact event fields
+POST {{baseUrl}}/api/v1/compliance/redact/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "fields": ["payload.ipAddress", "resourceId"],
+  "reason": "PII redaction",
+  "redactedBy": "newadmin"
+}
+
+### 20) Export audit events as JSON
+GET {{baseUrl}}/api/v1/compliance/export/json
+Authorization: Bearer {{token}}
+
+### 21) Export audit events as CSV
+GET {{baseUrl}}/api/v1/compliance/export/csv
+Authorization: Bearer {{token}}
+
+### 22) Generate audit report
+GET {{baseUrl}}/api/v1/compliance/reports/audit
+Authorization: Bearer {{token}}
+
+### 23) Example role-specific login (AUDITOR)
+POST {{baseUrl}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "auditorUser",
+  "password": "AuditorPassword123!"
+}
+
+### 24) Example role-specific login (AUDIT_WRITER)
+POST {{baseUrl}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "writerUser",
+  "password": "WriterPassword123!"
+}
