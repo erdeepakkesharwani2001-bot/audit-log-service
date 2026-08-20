@@ -1,0 +1,47 @@
+# Build outputs
+/target/
+/build/
+/out/
+/.gradle/
+**/target/
+**/build/
+
+# Compiled Java classes
+*.class
+*.jar
+*.war
+*.ear
+
+# Test and coverage artifacts
+*.exec
+coverage/
+jacoco.exec
+
+# Logs and local run output
+*.log
+logs/
+build.log
+
+# IDE/editor files
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local env and secrets
+.env
+.env.*
+*.local.properties
+application-local.properties
+
+# Maven wrapper metadata (keep wrapper files if present)
+.mvn/timing.properties
+
+# Optional: keep generated SQL if you want it committed
+# src/main/resources/db/migration/
