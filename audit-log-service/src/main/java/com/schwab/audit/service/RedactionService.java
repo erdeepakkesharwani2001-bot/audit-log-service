@@ -43,6 +43,7 @@ public class RedactionService {
      * @return updated event
      */
     @Transactional(readOnly = false)
+    @SuppressWarnings("unchecked")
     public AuditEvent redactEvent(Long eventId, List<String> fieldsToRedact, String reason, String redactedBy) throws JsonProcessingException {
         log.info("Redacting event {} - fields: {}, reason: {}", eventId, fieldsToRedact, reason);
 
